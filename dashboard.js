@@ -92,7 +92,8 @@ const COLORS = {
     rose: '#f43f5e',
     emerald: '#059669',
     amber: '#d97706',
-    sky: '#0284c7'
+    sky: '#0284c7',
+    accent: '#f59e0b'
 };
 
 const CHART_PALETTE = [
@@ -1107,7 +1108,7 @@ function renderTable() {
         </tr>
     `).join('');
 
-    document.getElementById('tableInfo').textContent = `Showing ${start + 1}-${Math.min(start + rowsPerPage, data.length)} of ${data.length} records`;
+    document.getElementById('tableInfo').textContent = data.length === 0 ? 'No records found' : `Showing ${start + 1}-${Math.min(start + rowsPerPage, data.length)} of ${data.length} records`;
     renderPagination(totalPages);
 }
 
