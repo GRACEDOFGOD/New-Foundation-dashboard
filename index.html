@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Foundation School - Fees Analytics Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="preloader-text">New Foundation School</div>
+            <div class="preloader-bar"><div class="preloader-progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="logo-text">
+                    <h2>New Foundation</h2>
+                    <span>School Analytics</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="fas fa-angles-left"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#overview" class="nav-link active" data-section="overview">
+                <i class="fas fa-chart-pie"></i><span>Overview</span>
+            </a>
+            <a href="#financial" class="nav-link" data-section="financial">
+                <i class="fas fa-coins"></i><span>Financial Analysis</span>
+            </a>
+            <a href="#students" class="nav-link" data-section="students">
+                <i class="fas fa-users"></i><span>Student Demographics</span>
+            </a>
+            <a href="#payments" class="nav-link" data-section="payments">
+                <i class="fas fa-credit-card"></i><span>Payment Insights</span>
+            </a>
+            <a href="#scholarships" class="nav-link" data-section="scholarships">
+                <i class="fas fa-award"></i><span>Scholarships</span>
+            </a>
+            <a href="#records" class="nav-link" data-section="records">
+                <i class="fas fa-table"></i><span>Student Records</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="theme-switch">
+                <i class="fas fa-sun"></i>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1 id="pageTitle">Dashboard Overview</h1>
+                    <p class="breadcrumb">Home / <span id="breadcrumb">Overview</span></p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search students..." id="globalSearch">
+                </div>
+                <div class="topbar-actions">
+                    <button class="action-btn" id="exportBtn" title="Export Report">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="action-btn" id="printBtn" title="Print Dashboard">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <div class="user-profile">
+                        <div class="avatar"><i class="fas fa-user-tie"></i></div>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Class</label>
+                <select id="filterClass">
+                    <option value="all">All Classes</option>
+                    <option value="JSS1">JSS 1</option>
+                    <option value="JSS2">JSS 2</option>
+                    <option value="JSS3">JSS 3</option>
+                    <option value="SS1">SS 1</option>
+                    <option value="SS2">SS 2</option>
+                    <option value="SS3">SS 3</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Gender</label>
+                <select id="filterGender">
+                    <option value="all">All Genders</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Payment Status</label>
+                <select id="filterStatus">
+                    <option value="all">All Status</option>
+                    <option value="Full">Fully Paid</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Unpaid">Unpaid</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Income Level</label>
+                <select id="filterIncome">
+                    <option value="all">All Levels</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <button class="reset-btn" id="resetFilters">
+                <i class="fas fa-rotate-left"></i> Reset
+            </button>
+        </div>
+
+        <!-- Dashboard Sections -->
+        <div class="dashboard-content">
+            <!-- OVERVIEW SECTION -->
+            <section class="section active" id="section-overview">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-revenue">
+                        <div class="kpi-icon"><i class="fas fa-naira-sign"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Expected Revenue</span>
+                            <h3 class="kpi-value" id="kpiTotalFees">0</h3>
+                        </div>
+                        <div class="kpi-trend up"><i class="fas fa-arrow-trend-up"></i> 100%</div>
+                    </div>
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Collected</span>
+                            <h3 class="kpi-value" id="kpiCollected">0</h3>
+                        </div>
+                        <div class="kpi-trend" id="kpiCollectedTrend"><i class="fas fa-arrow-trend-up"></i> <span>0%</span></div>
+                    </div>
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Outstanding Balance</span>
+                            <h3 class="kpi-value" id="kpiBalance">0</h3>
+                        </div>
+                        <div class="kpi-trend down"><i class="fas fa-arrow-trend-down"></i> <span id="kpiBalancePct">0%</span></div>
+                    </div>
+                    <div class="kpi-card kpi-students">
+                        <div class="kpi-icon"><i class="fas fa-user-graduate"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Students</span>
+                            <h3 class="kpi-value" id="kpiStudents">0</h3>
+                        </div>
+                        <div class="kpi-sub"><span id="kpiPaid">0</span> Paid &bull; <span id="kpiUnpaid">0</span> Unpaid</div>
+                    </div>
+                    <div class="kpi-card kpi-scholarship">
+                        <div class="kpi-icon"><i class="fas fa-award"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Scholarship Awarded</span>
+                            <h3 class="kpi-value" id="kpiScholarship">0</h3>
+                        </div>
+                        <div class="kpi-sub"><span id="kpiScholarshipCount">0</span> Recipients</div>
+                    </div>
+                    <div class="kpi-card kpi-collection-rate">
+                        <div class="kpi-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Collection Rate</span>
+                            <h3 class="kpi-value" id="kpiCollectionRate">0%</h3>
+                        </div>
+                        <div class="kpi-progress-bar"><div class="kpi-progress" id="kpiProgressBar"></div></div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 1 -->
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> Payment Status Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="chartPaymentStatus"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar"></i> Revenue by Class</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="chartRevenueByClass"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 2 -->
+                <div class="charts-grid-3">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-venus-mars"></i> Gender Distribution</h3>
+                        </div>
+                        <div class="chart-body chart-body-sm">
+                            <canvas id="chartGender"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-money-bill-wave"></i> Payment Methods</h3>
+                        </div>
+                        <div class="chart-body chart-body-sm">
+                            <canvas id="chartPaymentMethod"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-layer-group"></i> Income Level Split</h3>
+                        </div>
+                        <div class="chart-body chart-body-sm">
+                            <canvas id="chartIncomeLevel"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINANCIAL SECTION -->
+            <section class="section" id="section-financial">
+                <div class="charts-grid-2">
+                    <div class="chart-card full-width">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-area"></i> Monthly Collection Trend</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartMonthlyTrend"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar"></i> Fees vs Collection by Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartFeesVsCollection"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-line"></i> Outstanding Balance by Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartBalanceByClass"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-percent"></i> Collection Rate by Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartCollectionRateByClass"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STUDENTS SECTION -->
+            <section class="section" id="section-students">
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-users"></i> Students per Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartStudentsPerClass"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar"></i> Age Distribution</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartAgeDistribution"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-venus-mars"></i> Gender by Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartGenderByClass"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> Income Level by Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartIncomeLevelByClass"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAYMENTS SECTION -->
+            <section class="section" id="section-payments">
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-clock"></i> Late Payment Analysis</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartLateDays"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-credit-card"></i> Payment Method by Status</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartPaymentMethodByStatus"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-ranking-star"></i> Top 10 Highest Balances</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartTopBalances"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar"></i> Payment Status by Income Level</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartStatusByIncome"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCHOLARSHIPS SECTION -->
+            <section class="section" id="section-scholarships">
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-award"></i> Scholarship Distribution by Class</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartScholarshipByClass"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-hand-holding-dollar"></i> Scholarship by Income Level</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartScholarshipByIncome"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid-2">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> Scholarship Amount Tiers</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartScholarshipTiers"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-line"></i> Scholarship vs Payment Compliance</h3>
+                        </div>
+                        <div class="chart-body chart-body-lg">
+                            <canvas id="chartScholarshipVsPayment"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RECORDS SECTION -->
+            <section class="section" id="section-records">
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fas fa-table"></i> Complete Student Records</h3>
+                        <div class="table-controls">
+                            <div class="table-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search records..." id="tableSearch">
+                            </div>
+                            <button class="export-table-btn" id="exportTableBtn">
+                                <i class="fas fa-file-csv"></i> Export CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="studentTable">
+                            <thead>
+                                <tr>
+                                    <th data-sort="Student_ID">ID <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Student_Name">Name <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Class">Class <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Gender">Gender <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Age">Age <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Total_Fees">Total Fees <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Amount_Paid">Paid <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Balance">Balance <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Payment_Status">Status <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Late_Days">Late Days <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Scholarship_Amount">Scholarship <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Parent_Income_Level">Income <i class="fas fa-sort"></i></th>
+                                    <th data-sort="Payment_Method">Method <i class="fas fa-sort"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <span id="tableInfo">Showing 0 of 0 records</span>
+                        <div class="pagination" id="pagination"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>New Foundation School &copy; 2026 &mdash; Professional Analytics Dashboard</p>
+            <p>Data-driven decisions for academic excellence</p>
+        </footer>
+    </main>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
