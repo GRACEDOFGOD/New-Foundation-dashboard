@@ -255,6 +255,56 @@
 
             <!-- FINANCIAL SECTION -->
             <section class="section" id="section-financial">
+                <!-- Financial KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-revenue">
+                        <div class="kpi-icon"><i class="fas fa-naira-sign"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Expected Fees</span>
+                            <h3 class="kpi-value" id="finKpiTotalFees">0</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Collected</span>
+                            <h3 class="kpi-value" id="finKpiCollected">0</h3>
+                        </div>
+                        <div class="kpi-trend" id="finKpiCollectedTrend"><i class="fas fa-arrow-trend-up"></i> <span>0%</span></div>
+                    </div>
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Outstanding</span>
+                            <h3 class="kpi-value" id="finKpiOutstanding">0</h3>
+                        </div>
+                        <div class="kpi-trend down"><i class="fas fa-arrow-trend-down"></i> <span id="finKpiOutstandingPct">0%</span></div>
+                    </div>
+                    <div class="kpi-card kpi-collection-rate">
+                        <div class="kpi-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Collection Rate</span>
+                            <h3 class="kpi-value" id="finKpiRate">0%</h3>
+                        </div>
+                        <div class="kpi-progress-bar"><div class="kpi-progress" id="finKpiProgressBar"></div></div>
+                    </div>
+                    <div class="kpi-card kpi-students">
+                        <div class="kpi-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Avg. Collection/Month</span>
+                            <h3 class="kpi-value" id="finKpiAvgMonthly">0</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-scholarship">
+                        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Highest Class Balance</span>
+                            <h3 class="kpi-value" id="finKpiHighestBalance">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="finKpiHighestBalanceClass">-</div>
+                    </div>
+                </div>
+
                 <div class="charts-grid-2">
                     <div class="chart-card full-width">
                         <div class="chart-header">
@@ -295,6 +345,57 @@
 
             <!-- STUDENTS SECTION -->
             <section class="section" id="section-students">
+                <!-- Student Demographics KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-students">
+                        <div class="kpi-icon"><i class="fas fa-user-graduate"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Students</span>
+                            <h3 class="kpi-value" id="stuKpiTotal">0</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-icon"><i class="fas fa-mars"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Male Students</span>
+                            <h3 class="kpi-value" id="stuKpiMale">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="stuKpiMalePct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-icon"><i class="fas fa-venus"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Female Students</span>
+                            <h3 class="kpi-value" id="stuKpiFemale">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="stuKpiFemalePct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-revenue">
+                        <div class="kpi-icon"><i class="fas fa-child"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Average Age</span>
+                            <h3 class="kpi-value" id="stuKpiAvgAge">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="stuKpiAgeRange">-</div>
+                    </div>
+                    <div class="kpi-card kpi-scholarship">
+                        <div class="kpi-icon"><i class="fas fa-building-columns"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Most Populated Class</span>
+                            <h3 class="kpi-value" id="stuKpiTopClass">-</h3>
+                        </div>
+                        <div class="kpi-sub" id="stuKpiTopClassCount">0 students</div>
+                    </div>
+                    <div class="kpi-card kpi-collection-rate">
+                        <div class="kpi-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Classes</span>
+                            <h3 class="kpi-value" id="stuKpiClassCount">0</h3>
+                        </div>
+                        <div class="kpi-sub">JSS1 - SS3</div>
+                    </div>
+                </div>
+
                 <div class="charts-grid-2">
                     <div class="chart-card">
                         <div class="chart-header">
@@ -335,6 +436,58 @@
 
             <!-- PAYMENTS SECTION -->
             <section class="section" id="section-payments">
+                <!-- Payment Insights KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-icon"><i class="fas fa-circle-check"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Fully Paid Students</span>
+                            <h3 class="kpi-value" id="payKpiFullyPaid">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="payKpiFullyPaidPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-scholarship">
+                        <div class="kpi-icon"><i class="fas fa-clock-rotate-left"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Partial Payments</span>
+                            <h3 class="kpi-value" id="payKpiPartial">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="payKpiPartialPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-icon"><i class="fas fa-ban"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Unpaid Students</span>
+                            <h3 class="kpi-value" id="payKpiUnpaid">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="payKpiUnpaidPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-revenue">
+                        <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Avg. Late Days</span>
+                            <h3 class="kpi-value" id="payKpiAvgLate">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="payKpiMaxLate">Max: 0 days</div>
+                    </div>
+                    <div class="kpi-card kpi-students">
+                        <div class="kpi-icon"><i class="fas fa-credit-card"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Most Used Method</span>
+                            <h3 class="kpi-value" id="payKpiTopMethod">-</h3>
+                        </div>
+                        <div class="kpi-sub" id="payKpiTopMethodCount">0 transactions</div>
+                    </div>
+                    <div class="kpi-card kpi-collection-rate">
+                        <div class="kpi-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Highest Outstanding</span>
+                            <h3 class="kpi-value" id="payKpiHighestDebt">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="payKpiHighestDebtName">-</div>
+                    </div>
+                </div>
+
                 <div class="charts-grid-2">
                     <div class="chart-card">
                         <div class="chart-header">
@@ -375,6 +528,57 @@
 
             <!-- SCHOLARSHIPS SECTION -->
             <section class="section" id="section-scholarships">
+                <!-- Scholarship KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-scholarship">
+                        <div class="kpi-icon"><i class="fas fa-award"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Scholarship Fund</span>
+                            <h3 class="kpi-value" id="schKpiTotal">0</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Recipients</span>
+                            <h3 class="kpi-value" id="schKpiRecipients">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="schKpiRecipientsPct">0% of students</div>
+                    </div>
+                    <div class="kpi-card kpi-revenue">
+                        <div class="kpi-icon"><i class="fas fa-naira-sign"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Avg. Scholarship</span>
+                            <h3 class="kpi-value" id="schKpiAvg">0</h3>
+                        </div>
+                        <div class="kpi-sub">Per recipient</div>
+                    </div>
+                    <div class="kpi-card kpi-students">
+                        <div class="kpi-icon"><i class="fas fa-medal"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Full Scholarship (10K)</span>
+                            <h3 class="kpi-value" id="schKpiFull">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="schKpiFullPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Partial Scholarship (5K)</span>
+                            <h3 class="kpi-value" id="schKpiPartial">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="schKpiPartialPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-collection-rate">
+                        <div class="kpi-icon"><i class="fas fa-user-slash"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">No Scholarship</span>
+                            <h3 class="kpi-value" id="schKpiNone">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="schKpiNonePct">0%</div>
+                    </div>
+                </div>
+
                 <div class="charts-grid-2">
                     <div class="chart-card">
                         <div class="chart-header">
@@ -415,6 +619,41 @@
 
             <!-- RECORDS SECTION -->
             <section class="section" id="section-records">
+                <!-- Records Summary KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-students">
+                        <div class="kpi-icon"><i class="fas fa-database"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Records</span>
+                            <h3 class="kpi-value" id="recKpiTotal">0</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-icon"><i class="fas fa-circle-check"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Paid</span>
+                            <h3 class="kpi-value" id="recKpiPaid">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="recKpiPaidPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-scholarship">
+                        <div class="kpi-icon"><i class="fas fa-clock-rotate-left"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Partial</span>
+                            <h3 class="kpi-value" id="recKpiPartial">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="recKpiPartialPct">0%</div>
+                    </div>
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-icon"><i class="fas fa-ban"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Unpaid</span>
+                            <h3 class="kpi-value" id="recKpiUnpaid">0</h3>
+                        </div>
+                        <div class="kpi-sub" id="recKpiUnpaidPct">0%</div>
+                    </div>
+                </div>
+
                 <div class="table-card">
                     <div class="table-header">
                         <h3><i class="fas fa-table"></i> Complete Student Records</h3>

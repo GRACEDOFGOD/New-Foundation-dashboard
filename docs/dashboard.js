@@ -161,6 +161,174 @@ function updateKPIs() {
     setTimeout(() => {
         document.getElementById('kpiProgressBar').style.width = collectionRate + '%';
     }, 300);
+
+    updateFinancialKPIs();
+    updateStudentKPIs();
+    updatePaymentKPIs();
+    updateScholarshipKPIs();
+    updateRecordsKPIs();
+}
+
+// ============ FINANCIAL SECTION KPIs ============
+function updateFinancialKPIs() {
+    const data = filteredData;
+    const totalFees = data.reduce((s, d) => s + d.Total_Fees, 0);
+    const totalPaid = data.reduce((s, d) => s + d.Amount_Paid, 0);
+    const totalBalance = data.reduce((s, d) => s + d.Balance, 0);
+    const collectionRate = totalFees > 0 ? ((totalPaid / totalFees) * 100).toFixed(1) : 0;
+
+    animateValue(document.getElementById('finKpiTotalFees'), 0, totalFees, 1200, true);
+    animateValue(document.getElementById('finKpiCollected'), 0, totalPaid, 1200, true);
+    animateValue(document.getElementById('finKpiOutstanding'), 0, totalBalance, 1200, true);
+    document.getElementById('finKpiRate').textContent = collectionRate + '%';
+    document.getElementById('finKpiOutstandingPct').textContent = (totalFees > 0 ? ((totalBalance / totalFees) * 100).toFixed(1) : 0) + '%';
+
+    const collectedPct = totalFees > 0 ? ((totalPaid / totalFees) * 100).toFixed(1) : 0;
+    const trendEl = document.getElementById('finKpiCollectedTrend');
+    trendEl.className = 'kpi-trend ' + (collectedPct >= 50 ? 'up' : 'down');
+    trendEl.innerHTML = `<i class="fas fa-arrow-trend-${collectedPct >= 50 ? 'up' : 'down'}"></i> <span>${collectedPct}%</span>`;
+
+    setTimeout(() => {
+        document.getElementById('finKpiProgressBar').style.width = collectionRate + '%';
+    }, 300);
+
+    const paidStudents = data.filter(d => d.Payment_Date && d.Payment_Date !== '');
+    const months = new Set();
+    paidStudents.forEach(d => {
+        const date = new Date(d.Payment_Date);
+        months.add(date.getMonth() + '-' + date.getFullYear());
+    });
+    const avgMonthly = months.size > 0 ? Math.round(totalPaid / months.size) : 0;
+    animateValue(document.getElementById('finKpiAvgMonthly'), 0, avgMonthly, 1000, true);
+
+    const classBalances = {};
+    CLASS_ORDER.forEach(c => classBalances[c] = 0);
+    data.forEach(d => { if (classBalances.hasOwnProperty(d.Class)) classBalances[d.Class] += d.Balance; });
+    let highestClass = '-';
+    let highestBal = 0;
+    Object.entries(classBalances).forEach(([cls, bal]) => {
+        if (bal > highestBal) { highestBal = bal; highestClass = cls; }
+    });
+    animateValue(document.getElementById('finKpiHighestBalance'), 0, highestBal, 1000, true);
+    document.getElementById('finKpiHighestBalanceClass').textContent = highestClass;
+}
+
+// ============ STUDENT DEMOGRAPHICS KPIs ============
+function updateStudentKPIs() {
+    const data = filteredData;
+    const males = data.filter(d => d.Gender === 'Male').length;
+    const females = data.filter(d => d.Gender === 'Female').length;
+    const total = data.length;
+
+    animateValue(document.getElementById('stuKpiTotal'), 0, total, 800, false);
+    animateValue(document.getElementById('stuKpiMale'), 0, males, 800, false);
+    animateValue(document.getElementById('stuKpiFemale'), 0, females, 800, false);
+    document.getElementById('stuKpiMalePct').textContent = total > 0 ? ((males / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('stuKpiFemalePct').textContent = total > 0 ? ((females / total) * 100).toFixed(1) + '%' : '0%';
+
+    const avgAge = total > 0 ? (data.reduce((s, d) => s + d.Age, 0) / total).toFixed(1) : 0;
+    const minAge = total > 0 ? Math.min(...data.map(d => d.Age)) : 0;
+    const maxAge = total > 0 ? Math.max(...data.map(d => d.Age)) : 0;
+    document.getElementById('stuKpiAvgAge').textContent = avgAge;
+    document.getElementById('stuKpiAgeRange').textContent = `Range: ${minAge} - ${maxAge} years`;
+
+    const classCounts = {};
+    data.forEach(d => { classCounts[d.Class] = (classCounts[d.Class] || 0) + 1; });
+    let topClass = '-';
+    let topCount = 0;
+    Object.entries(classCounts).forEach(([cls, cnt]) => {
+        if (cnt > topCount) { topCount = cnt; topClass = cls; }
+    });
+    document.getElementById('stuKpiTopClass').textContent = topClass;
+    document.getElementById('stuKpiTopClassCount').textContent = topCount + ' students';
+
+    const uniqueClasses = new Set(data.map(d => d.Class)).size;
+    document.getElementById('stuKpiClassCount').textContent = uniqueClasses;
+}
+
+// ============ PAYMENT INSIGHTS KPIs ============
+function updatePaymentKPIs() {
+    const data = filteredData;
+    const total = data.length;
+    const fullyPaid = data.filter(d => d.Payment_Status === 'Full').length;
+    const partial = data.filter(d => d.Payment_Status === 'Partial').length;
+    const unpaid = data.filter(d => d.Payment_Status === 'Unpaid').length;
+
+    animateValue(document.getElementById('payKpiFullyPaid'), 0, fullyPaid, 800, false);
+    animateValue(document.getElementById('payKpiPartial'), 0, partial, 800, false);
+    animateValue(document.getElementById('payKpiUnpaid'), 0, unpaid, 800, false);
+    document.getElementById('payKpiFullyPaidPct').textContent = total > 0 ? ((fullyPaid / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('payKpiPartialPct').textContent = total > 0 ? ((partial / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('payKpiUnpaidPct').textContent = total > 0 ? ((unpaid / total) * 100).toFixed(1) + '%' : '0%';
+
+    const lateDays = data.filter(d => d.Late_Days > 0);
+    const avgLate = lateDays.length > 0 ? (lateDays.reduce((s, d) => s + d.Late_Days, 0) / lateDays.length).toFixed(0) : 0;
+    const maxLate = lateDays.length > 0 ? Math.max(...lateDays.map(d => d.Late_Days)) : 0;
+    document.getElementById('payKpiAvgLate').textContent = avgLate;
+    document.getElementById('payKpiMaxLate').textContent = `Max: ${maxLate} days`;
+
+    const methodCounts = {};
+    data.filter(d => d.Payment_Method && d.Payment_Method !== '').forEach(d => {
+        methodCounts[d.Payment_Method] = (methodCounts[d.Payment_Method] || 0) + 1;
+    });
+    let topMethod = '-';
+    let topMethodCount = 0;
+    Object.entries(methodCounts).forEach(([method, cnt]) => {
+        if (cnt > topMethodCount) { topMethodCount = cnt; topMethod = method; }
+    });
+    document.getElementById('payKpiTopMethod').textContent = topMethod;
+    document.getElementById('payKpiTopMethodCount').textContent = topMethodCount + ' transactions';
+
+    const withBalance = data.filter(d => d.Balance > 0).sort((a, b) => b.Balance - a.Balance);
+    if (withBalance.length > 0) {
+        animateValue(document.getElementById('payKpiHighestDebt'), 0, withBalance[0].Balance, 1000, true);
+        document.getElementById('payKpiHighestDebtName').textContent = withBalance[0].Student_Name;
+    } else {
+        document.getElementById('payKpiHighestDebt').textContent = formatCurrency(0);
+        document.getElementById('payKpiHighestDebtName').textContent = '-';
+    }
+}
+
+// ============ SCHOLARSHIP KPIs ============
+function updateScholarshipKPIs() {
+    const data = filteredData;
+    const total = data.length;
+    const totalScholarship = data.reduce((s, d) => s + d.Scholarship_Amount, 0);
+    const recipients = data.filter(d => d.Scholarship_Amount > 0);
+    const fullScholarship = data.filter(d => d.Scholarship_Amount === 10000).length;
+    const partialScholarship = data.filter(d => d.Scholarship_Amount === 5000).length;
+    const noScholarship = data.filter(d => d.Scholarship_Amount === 0).length;
+    const avgScholarship = recipients.length > 0 ? Math.round(totalScholarship / recipients.length) : 0;
+
+    animateValue(document.getElementById('schKpiTotal'), 0, totalScholarship, 1200, true);
+    animateValue(document.getElementById('schKpiRecipients'), 0, recipients.length, 800, false);
+    animateValue(document.getElementById('schKpiAvg'), 0, avgScholarship, 1000, true);
+    animateValue(document.getElementById('schKpiFull'), 0, fullScholarship, 800, false);
+    animateValue(document.getElementById('schKpiPartial'), 0, partialScholarship, 800, false);
+    animateValue(document.getElementById('schKpiNone'), 0, noScholarship, 800, false);
+
+    document.getElementById('schKpiRecipientsPct').textContent = total > 0 ? ((recipients.length / total) * 100).toFixed(1) + '% of students' : '0% of students';
+    document.getElementById('schKpiFullPct').textContent = total > 0 ? ((fullScholarship / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('schKpiPartialPct').textContent = total > 0 ? ((partialScholarship / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('schKpiNonePct').textContent = total > 0 ? ((noScholarship / total) * 100).toFixed(1) + '%' : '0%';
+}
+
+// ============ RECORDS SUMMARY KPIs ============
+function updateRecordsKPIs() {
+    const data = filteredData;
+    const total = data.length;
+    const paid = data.filter(d => d.Payment_Status === 'Full').length;
+    const partial = data.filter(d => d.Payment_Status === 'Partial').length;
+    const unpaid = data.filter(d => d.Payment_Status === 'Unpaid').length;
+
+    animateValue(document.getElementById('recKpiTotal'), 0, total, 800, false);
+    animateValue(document.getElementById('recKpiPaid'), 0, paid, 800, false);
+    animateValue(document.getElementById('recKpiPartial'), 0, partial, 800, false);
+    animateValue(document.getElementById('recKpiUnpaid'), 0, unpaid, 800, false);
+
+    document.getElementById('recKpiPaidPct').textContent = total > 0 ? ((paid / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('recKpiPartialPct').textContent = total > 0 ? ((partial / total) * 100).toFixed(1) + '%' : '0%';
+    document.getElementById('recKpiUnpaidPct').textContent = total > 0 ? ((unpaid / total) * 100).toFixed(1) + '%' : '0%';
 }
 
 // ============ CHART CREATION ============
